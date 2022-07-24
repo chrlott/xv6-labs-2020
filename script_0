@@ -1,0 +1,7 @@
+Script started on 2022-07-12 10:45:50+08:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="49" LINES="29"]
+]0;hyl: xv6-labs-2020[01;32mhyl[00m:[01;34mxv6-labs-2020[00m$ echo hello
+hello
+]0;hyl: xv6-labs-2020[01;32mhyl[00m:[01;34mxv6-labs-2020[00m$ eit[Kxi[K[K[Kxit
+exit
+
+Script done on 2022-07-12 10:46:03+08:00 [COMMAND_EXIT_CODE="0"]
