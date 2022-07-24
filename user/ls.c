@@ -4,7 +4,7 @@
 #include "kernel/fs.h"
 
 char*
-fmtname(char *path)
+fmtname(char *path)    //get pure file name
 {
   static char buf[DIRSIZ+1];
   char *p;
@@ -35,7 +35,7 @@ ls(char *path)
     return;
   }
 
-  if(fstat(fd, &st) < 0){
+  if(fstat(fd, &st) < 0){      //fstat: use fd to get stat(file info)
     fprintf(2, "ls: cannot stat %s\n", path);
     close(fd);
     return;
@@ -53,13 +53,13 @@ ls(char *path)
     }
     strcpy(buf, path);
     p = buf+strlen(buf);
-    *p++ = '/';
+    *p++ = '/';    //add '/' to the end, and p++
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
       if(de.inum == 0)
         continue;
-      memmove(p, de.name, DIRSIZ);
+      memmove(p, de.name, DIRSIZ);   
       p[DIRSIZ] = 0;
-      if(stat(buf, &st) < 0){
+      if(stat(buf, &st) < 0){     //stat: use filename to get stat
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
