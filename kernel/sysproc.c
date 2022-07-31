@@ -47,8 +47,19 @@ sys_sbrk(void)
   if(argint(0, &n) < 0)
     return -1;
   addr = myproc()->sz;
-  if(growproc(n) < 0)
-    return -1;
+  myproc()->sz += n;
+  // if(growproc(n) < 0)
+  //   return -1;
+  if (n < 0) {
+    // deallocate the memory
+    if ((myproc()->sz + n) < 0) {
+        return -1;
+    } else {
+        if (uvmdealloc(myproc()->pagetable, addr, addr+n) != (addr+n)) {
+            return -1;
+        }
+    }
+  }
   return addr;
 }
 
