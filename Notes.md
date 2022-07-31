@@ -25,17 +25,17 @@
 
 XV6有一个叫做walk的函数，它在软件中实现了MMU硬件相同的功能，完成3级 page table的查找。
 ### 内核地址空间
-![3.2](/img/3.2.PNG)
+![3_2](/img/3_2.PNG)
 
 ### 用户地址空间
-![3.3](/img/3.3.PNG)
+![3_3](/img/3_3.PNG)
 
 text区域是程序的指令，data区域存放的是初始化了的全局变量，BSS包含了未被初始化或者初始化为0的全局变量。之所以这些变量要单独列出来，是因为例如你在C语言中定义了一个大的矩阵作为全局变量，它的元素初始值都是0，为什么要为这个矩阵分配内存呢？其实只需要记住这个矩阵的内容是0就行。
 
 
 ## Chapter 4 : trap
 ### 前置知识
-![4.1](/img/4.1.PNG)
+![4_1](/img/4_1.PNG)
 
 caller: not preserved across funcall
 
@@ -51,7 +51,7 @@ trap发生时需要：
 supervisor mode拥有的特权：使用SATP等寄存器，访问PTE-U=0的页表，仅此而已。
 
 write系统调用的过程
-![4.2](/img/4.2.PNG)
+![4_2](/img/4_2.PNG)
 
 ### ECALL函数
 ecall并不会切换page table，我们需要在user page table中的某个地方来执行最初的内核代码。而这个trampoline page（PTE-U=0）。内核事先设置好了STVEC寄存器的内容为0x3ffffff000，这就是trampoline page的起始位置，也是uservec函数的起始。
@@ -119,7 +119,7 @@ page fault触发的trap机制并且进入到内核空间后，可以得到以下
 - 引起page fault时的程序计数器值，这表明了page fault在用户空间发生的位置，以便重新执行对应的指令（SEPC寄存器中，并同时会保存在trapframe->epc中）
 ### Lazy Page Allocation
 sbrk是XV6提供的系统调用，它使得用户应用程序能扩大自己的heap。sbrk指向的是heap的最底端，同时也是stack的最顶端，该位置以进程中的sz字段_p->sz表示。
-![5.1](/img/5.1.PNG)
+![5_1](/img/5_1.PNG)
 
 为了避免内存浪费，采用lazy page allocation。sbrk系统调用基本上不做任何事情，唯一需要做的事情就是提升_p->sz_，将_p->sz_增加n，其中n是需要新分配的内存page数量。但是内核在这个时间点并不会分配任何物理内存。之后应用程序如果使用到了新申请的那部分内存，这时会触发page fault，因为我们还没有将新的内存映射到page table。所以，如果我们解析一个大于旧的_p->sz_，但是又小于新的_p->sz（注，也就是旧的p->sz + n）_的虚拟地址，我们希望内核能够分配一个内存page，并且重新执行指令。
 
@@ -133,7 +133,3 @@ sbrk是XV6提供的系统调用，它使得用户应用程序能扩大自己的h
 在lazy allocation中，如果内存耗尽了该如何办？
 
 可以撤回并释放page，那么你就有了一个新的空闲的page。有很多种策略来选择撤回哪一个page，包括LRU，还会参考是否是dirty page、page的access标识（是否被读或写）。该标识会定期被操作系统清零。
-
-
-
-
