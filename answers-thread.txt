@@ -1,0 +1,1 @@
+Because when 2 threads are inserting new key, both threads do e->next=n at the same time, and the *p=e enbles the table to add only the later one to its head, losing a key-value pair. 
