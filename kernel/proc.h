@@ -107,5 +107,5 @@ struct proc {
   int ticks;          // last call until now
   void (*handler)();           // function pointer
   int in_handler;            // flag of running
-  struct trapframe trapframe_cp;  //copy of trapframe_cp
+  struct trapframe trapframe_cp;  //copy of trapframe
 };
