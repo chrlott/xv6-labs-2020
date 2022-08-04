@@ -181,10 +181,10 @@ write_log(void)
   int tail;
 
   for (tail = 0; tail < log.lh.n; tail++) {
-    struct buf *to = bread(log.dev, log.start+tail+1); // log block
+    struct buf *to = bread(log.dev, log.start+tail+1); // log block in cache
     struct buf *from = bread(log.dev, log.lh.block[tail]); // cache block
-    memmove(to->data, from->data, BSIZE);
-    bwrite(to);  // write the log
+    memmove(to->data, from->data, BSIZE);   //copy modified cache block to log block in cache
+    bwrite(to);  // write the log block to disk
     brelse(from);
     brelse(to);
   }
